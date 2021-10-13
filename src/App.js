@@ -20,6 +20,8 @@ const App = () => {
   const [minting, setMinting] = useState(false);
   const [openSeaLink, setOpenSeaLink] = useState("");
 
+  const [cards, setCards] = useState([{position: "cardLeft"}, {position: "cardCenter"}, {position: "cardRight"}]);
+
   const checkIfWalletIsConnected = async () => {
     /*
      * First make sure we have access to window.ethereum
@@ -213,8 +215,28 @@ const App = () => {
               <span className="keyword">beautiful.</span> Each{" "}
               <span className="keyword">dope.</span>
             </p>
-            <h6 className="sub-text" style={{ fontWeight: 400 }}>
-              Discover your NFT today!
+            <div className="mobile-showcase">
+          {cards.map((card, key)=>{
+            return(
+              <div className={`card ${card.position}`}>
+              <div className="card-top">
+                <h2 className="walletAddress">0x4610...Cb4F</h2>
+              </div>
+              <div className="card-bottom">
+                <div className="name-price">
+                  <h3 className="name">Product Name</h3>
+                  <p className="price">0.7 ETH</p>
+                </div>
+                <a href={openSeaLink} className="view">
+                  View on OS
+                </a>
+              </div>
+            </div>
+            )
+          })}
+        </div>
+            <h6 className="sub-text">
+              Discover your NFT today 🎉
             </h6>
             {currentAccount === ""
               ? renderNotConnectedContainer()
@@ -235,23 +257,24 @@ const App = () => {
           </div>
         </div>
         <div className="right">
-          <div className="card">
-            <div className="card-top">
-              <h2 className="walletAddress">0x4610...Cb4F</h2>
-            </div>
-            <div className="card-bottom">
-              <div className="name-price">
-                <h3 className="name">Product Name</h3>
-                <p className="price">0.7 ETH</p>
+          {cards.map((card, key)=>{
+            return(
+              <div className={`card ${card.position}`}>
+              <div className="card-top">
+                <h2 className="walletAddress">0x4610...Cb4F</h2>
               </div>
-              <a href={openSeaLink} className="view">
-                View on OS
-              </a>
+              <div className="card-bottom">
+                <div className="name-price">
+                  <h3 className="name">Product Name</h3>
+                  <p className="price">0.7 ETH</p>
+                </div>
+                <a href={openSeaLink} className="view">
+                  View on OS
+                </a>
+              </div>
             </div>
-          </div>
-          {/* <h5 style={{ color: "white" }}>
-              {parseInt(mintedNFT)} /50 has been minted!
-            </h5> */}
+            )
+          })}
         </div>
       </div>
     </div>
