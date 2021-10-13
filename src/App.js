@@ -181,7 +181,7 @@ const App = () => {
   useEffect(() => {
     checkIfWalletIsConnected();
     mintedSoFar();
-  }, []);// eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Render Methods
   const renderNotConnectedContainer = () => (
@@ -205,36 +205,53 @@ const App = () => {
   return (
     <div className="App">
       <div className="container">
-        <div className="header-container">
-          <p className="header gradient-text">My NFT Collection</p>
-          <p className="sub-text">
-            Each unique. Each beautiful. Discover your NFT today.
-          </p>
-          {currentAccount === ""
-            ? renderNotConnectedContainer()
-            : renderMintUI()}
-          <h5 style={{ color: "white" }}>
-            {parseInt(mintedNFT)} /50 has been minted!
-          </h5>
-          {openSeaLink !== "" ? (
+        <div className="left">
+          <div className="header-container">
+            <h1 className="logo">⍥</h1>
+            <p className="header gradient-text">
+              Each <span className="keyword">unique.</span> Each{" "}
+              <span className="keyword">beautiful.</span> Each{" "}
+              <span className="keyword">dope.</span>
+            </p>
+            <h6 className="sub-text" style={{ fontWeight: 400 }}>
+              Discover your NFT today!
+            </h6>
+            {currentAccount === ""
+              ? renderNotConnectedContainer()
+              : renderMintUI()}
+          </div>
+          <div className="footer-container">
+            <img
+              alt="Twitter Logo"
+              className="twitter-logo"
+              src={twitterLogo}
+            />
             <a
-              href={openSeaLink}
+              className="footer-text"
+              href={TWITTER_LINK}
               target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "white" }}
-            >
-              <h5>View you NFT on OpenSea</h5>
-            </a>
-          ) : null}
+              rel="noreferrer"
+            >{`crafted by @${TWITTER_HANDLE}`}</a>
+          </div>
         </div>
-        <div className="footer-container">
-          <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
-          <a
-            className="footer-text"
-            href={TWITTER_LINK}
-            target="_blank"
-            rel="noreferrer"
-          >{`built by @${TWITTER_HANDLE}`}</a>
+        <div className="right">
+          <div className="card">
+            <div className="card-top">
+              <h2 className="walletAddress">0x4610...Cb4F</h2>
+            </div>
+            <div className="card-bottom">
+              <div className="name-price">
+                <h3 className="name">Product Name</h3>
+                <p className="price">0.7 ETH</p>
+              </div>
+              <a href={openSeaLink} className="view">
+                View on OS
+              </a>
+            </div>
+          </div>
+          {/* <h5 style={{ color: "white" }}>
+              {parseInt(mintedNFT)} /50 has been minted!
+            </h5> */}
         </div>
       </div>
     </div>
