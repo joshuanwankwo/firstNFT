@@ -2,14 +2,14 @@ import "./styles/App.css";
 import twitterLogo from "./assets/twitter-logo.svg";
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import EpicNft from "./utils/EpicNFT.json";
+import dubNft from "./utils/dubNFT.json";
 
 // Constants
 const TWITTER_HANDLE = "judicodes";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 // const TOTAL_MINT_COUNT = 50;
 
-const CONTRACT_ADDRESS = "0x402c7749b4A16164e46e5BDe48090A66B287D4fB";
+const CONTRACT_ADDRESS = "0xDB0A7Da648928d7E2392b5ebb2F010b9B6B73f45";
 
 const App = () => {
   /*
@@ -19,8 +19,13 @@ const App = () => {
   const [mintedNFT, setMintedNFT] = useState(0);
   const [minting, setMinting] = useState(false);
   const [openSeaLink, setOpenSeaLink] = useState("");
+  const [previewSvg, setPreviewSvg] = useState("");
 
-  const [cards, setCards] = useState([{position: "cardLeft"}, {position: "cardCenter"}, {position: "cardRight"}]);
+  const [cards, setCards] = useState([
+    { position: "cardLeft" },
+    { position: "cardCenter" },
+    { position: "cardRight" },
+  ]);
 
   const checkIfWalletIsConnected = async () => {
     /*
@@ -99,14 +104,14 @@ const App = () => {
         const signer = provider.getSigner();
         const connectedContract = new ethers.Contract(
           CONTRACT_ADDRESS,
-          EpicNft.abi,
+          dubNft.abi,
           signer
         );
 
         // THIS IS THE MAGIC SAUCE.
         // This will essentially "capture" our event when our contract throws it.
         // If you're familiar with webhooks, it's very similar to that!
-        connectedContract.on("NewEpicNFTMinted", (from, tokenId) => {
+        connectedContract.on("NewDubNFTMinted", (from, tokenId) => {
           console.log(from, tokenId.toNumber());
           alert(
             `Hey there! We've minted your NFT and sent it to your wallet. It may be blank right now. It can take a max of 10 min to show up on OpenSea. Here's the link: https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`
@@ -134,13 +139,16 @@ const App = () => {
         const signer = provider.getSigner();
         const connectedContract = new ethers.Contract(
           CONTRACT_ADDRESS,
-          EpicNft.abi,
+          dubNft.abi,
           signer
         );
 
         console.log("Going to pop wallet now to pay gas...");
-        let nftTxn = await connectedContract.getCrucifix();
-
+        let nftTxn = await connectedContract.getDub({
+          gasPrice: 100,
+          gasLimit: 9000000
+      });
+        console.log(connectedContract);
         console.log("Mining...please wait.");
         setMinting(true);
         await nftTxn.wait();
@@ -148,6 +156,8 @@ const App = () => {
         console.log(
           `Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`
         );
+        setPreviewSvg(connectedContract.previewSvg);
+        console.log(previewSvg);
         setMinting(false);
       } else {
         console.log("Ethereum object doesn't exist!");
@@ -165,7 +175,7 @@ const App = () => {
         const signer = provider.getSigner();
         const connectedContract = new ethers.Contract(
           CONTRACT_ADDRESS,
-          EpicNft.abi,
+          dubNft.abi,
           signer
         );
         const mintedSoFar = await connectedContract.mintedSoFar();
@@ -216,28 +226,26 @@ const App = () => {
               <span className="keyword">dope.</span>
             </p>
             <div className="mobile-showcase">
-          {cards.map((card, key)=>{
-            return(
-              <div className={`card ${card.position}`}>
-              <div className="card-top">
-                <h2 className="walletAddress">0x4610...Cb4F</h2>
-              </div>
-              <div className="card-bottom">
-                <div className="name-price">
-                  <h3 className="name">Product Name</h3>
-                  <p className="price">0.7 ETH</p>
-                </div>
-                <a href={openSeaLink} className="view">
-                  View on OS
-                </a>
-              </div>
+              {cards.map((card, key) => {
+                return (
+                  <div className={`card ${card.position}`} key={key}>
+                    <div className="card-top">
+                      <h2 className="walletAddress">0x4610...Cb4F</h2>
+                    </div>
+                    <div className="card-bottom">
+                      <div className="name-price">
+                        <h3 className="name">Product Name</h3>
+                        <p className="price">0.7 ETH</p>
+                      </div>
+                      <a href={openSeaLink} className="view">
+                        View on OS
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-            )
-          })}
-        </div>
-            <h6 className="sub-text">
-              Discover your NFT today 🎉
-            </h6>
+            <h6 className="sub-text">Discover your NFT today 🎉</h6>
             {currentAccount === ""
               ? renderNotConnectedContainer()
               : renderMintUI()}
@@ -257,23 +265,23 @@ const App = () => {
           </div>
         </div>
         <div className="right">
-          {cards.map((card, key)=>{
-            return(
-              <div className={`card ${card.position}`}>
-              <div className="card-top">
-                <h2 className="walletAddress">0x4610...Cb4F</h2>
-              </div>
-              <div className="card-bottom">
-                <div className="name-price">
-                  <h3 className="name">Product Name</h3>
-                  <p className="price">0.7 ETH</p>
+          {cards.map((card, key) => {
+            return (
+              <div className={`card ${card.position}`} key={key}>
+                <div className="card-top">
+                  <h2 className="walletAddress">0x4610...Cb4F</h2>
                 </div>
-                <a href={openSeaLink} className="view">
-                  View on OS
-                </a>
+                <div className="card-bottom">
+                  <div className="name-price">
+                    <h3 className="name">Product Name</h3>
+                    <p className="price">0.7 ETH</p>
+                  </div>
+                  <a href={openSeaLink} className="view">
+                    View on OS
+                  </a>
+                </div>
               </div>
-            </div>
-            )
+            );
           })}
         </div>
       </div>
