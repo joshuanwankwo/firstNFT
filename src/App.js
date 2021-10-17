@@ -21,11 +21,11 @@ const App = () => {
   const [openSeaLink, setOpenSeaLink] = useState("");
   const [previewSvg, setPreviewSvg] = useState("");
 
-  const [cards, setCards] = useState([
+  const cards = [
     { position: "cardLeft" },
     { position: "cardCenter" },
     { position: "cardRight" },
-  ]);
+  ]
 
   const checkIfWalletIsConnected = async () => {
     /*
@@ -146,8 +146,8 @@ const App = () => {
         console.log("Going to pop wallet now to pay gas...");
         let nftTxn = await connectedContract.getDub({
           gasPrice: 100,
-          gasLimit: 9000000
-      });
+          gasLimit: 9000000,
+        });
         console.log(connectedContract);
         console.log("Mining...please wait.");
         setMinting(true);
